@@ -11,32 +11,40 @@ body {
 }
 
 #game {
-    width: 600px;
+    width: 500px;
+    height: 500px;
     margin: 0 auto;
     padding: 20px;
+    position: relative;
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 5px;
-    margin-bottom: 20px;
-}
-
-.row {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    position: relative;
 }
 
 .cell {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     background-color: #e0e0e0;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
     border: 2px solid #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 0% 0%;
+    transition: transform 0.5s ease;
 }
 
 #rollButton {
@@ -46,7 +54,7 @@ body {
     border: none;
     cursor: pointer;
     font-size: 18px;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 #rollButton:hover {
@@ -71,6 +79,10 @@ body {
     height: 40px;
     background-color: #ff7f50;
     border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .plane2 {
