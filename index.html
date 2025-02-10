@@ -70,6 +70,13 @@
             font-size: 1.2em;
             color: #555;
         }
+        .restart-button {
+            display: none; /* 默认隐藏 */
+            background-color: #4caf50;
+        }
+        .restart-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +87,7 @@
     <div class="task" id="task">点击“开始游戏”提升爱情温度！</div>
     <div class="player-turn" id="playerTurn"></div>
     <button onclick="nextTask()">完成任务</button>
+    <button class="restart-button" id="restartButton" onclick="restartGame()">重新开始游戏</button>
 
     <div class="custom-task">
         <input type="text" id="customTaskInput" placeholder="输入自定义任务">
@@ -123,6 +131,7 @@
         function nextTask() {
             if (currentTemperature >= 100) {
                 alert("恭喜！你们的爱情温度已达到100%！继续保持甜蜜哦~");
+                document.getElementById("restartButton").style.display = "inline-block"; // 显示重新开始按钮
                 return;
             }
             currentTemperature += 10;
@@ -141,6 +150,15 @@
             } else {
                 alert("请输入有效的任务内容！");
             }
+        }
+
+        // 重新开始游戏
+        function restartGame() {
+            currentTemperature = 0;
+            currentPlayer = 1;
+            document.getElementById("temperature").style.height = "0%";
+            document.getElementById("restartButton").style.display = "none"; // 隐藏重新开始按钮
+            updateTask();
         }
 
         // 初始化
