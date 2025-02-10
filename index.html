@@ -93,12 +93,16 @@
             "为对方画肖像",
             "重现第一次约会场景",
             "互相说3个优点",
-            "亲吻对方脸颊"
+            "亲吻对方脸颊",
+            "互换手机1分钟",
+            "一起跳舞",
+            "一起做瑜伽",
+            "告诉对方一个心愿"
         ];
 
         const board = document.getElementById('board');
         const radius = 250; // 棋盘半径
-        const cellRadius = 100; // 格子半径 (相对棋盘中心)
+        const cellRadius = 120; // 格子半径 (相对棋盘中心)
         let currentPlayer = 1;
         let positions = {1: 0, 2: 0};
 
@@ -107,7 +111,7 @@
             const cell = document.createElement('div');
             cell.className = 'cell';
             cell.textContent = text;
-            const angle = (index * 30) - 90; // 每个格子间隔30度
+            const angle = (index * 360 / cells.length) - 90; // 格子均匀分布
             cell.style.transform = `rotate(${angle}deg) translate(${cellRadius}px) rotate(${-angle}deg)`;
             board.appendChild(cell);
         });
@@ -126,7 +130,7 @@
         // 更新棋子位置
         function updatePosition(player) {
             const plane = document.getElementById(`player${player}`);
-            const angle = (positions[player] * 30) - 90; // 每个格子间隔30度
+            const angle = (positions[player] * 360 / cells.length) - 90; // 每个格子间隔相等
             const rad = angle * Math.PI / 180;
             
             // 计算棋子位置的坐标
