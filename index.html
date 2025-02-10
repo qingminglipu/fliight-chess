@@ -44,9 +44,31 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin: 10px;
         }
         button:hover {
             background-color: #ff4c4c;
+        }
+        .custom-task {
+            margin-top: 20px;
+        }
+        .custom-task input {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+        .custom-task button {
+            background-color: #4caf50;
+        }
+        .custom-task button:hover {
+            background-color: #45a049;
+        }
+        .player-turn {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #555;
         }
     </style>
 </head>
@@ -56,7 +78,15 @@
         <div class="temperature" id="temperature" style="height: 0%;"></div>
     </div>
     <div class="task" id="task">点击“开始游戏”提升爱情温度！</div>
-    <button onclick="nextTask()">开始游戏</button>
+    <div class="player-turn" id="playerTurn"></div>
+    <button onclick="nextTask()">完成任务</button>
+
+    <div class="custom-task">
+        <input type="text" id="customTaskInput" placeholder="输入自定义任务">
+        <button onclick="addCustomTask()">添加任务</button>
+    </div>
+
+    <audio id="soundEffect" src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
 
     <script>
         const tasks = [
@@ -66,20 +96,55 @@
             "模仿对方的习惯动作。",
             "给对方一个温暖的拥抱。",
             "分享一件你最近为对方做的小事。",
-            "说出对方最让你心动的瞬间。"
+            "说出对方最让你心动的瞬间。",
+            "为对方唱一首情歌。",
+            "写下你们未来的一个小目标。",
+            "互相夸奖对方的三个优点。"
         ];
         let currentTemperature = 0;
+        let currentPlayer = 1;
 
+        // 播放音效
+        function playSound() {
+            const sound = document.getElementById("soundEffect");
+            sound.currentTime = 0; // 重置音效
+            sound.play();
+        }
+
+        // 更新任务显示
+        function updateTask() {
+            const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+            document.getElementById("task").textContent = randomTask;
+            document.getElementById("playerTurn").textContent = `轮到玩家 ${currentPlayer} 完成任务！`;
+            playSound(); // 播放音效
+        }
+
+        // 完成任务
         function nextTask() {
             if (currentTemperature >= 100) {
                 alert("恭喜！你们的爱情温度已达到100%！继续保持甜蜜哦~");
                 return;
             }
-            const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-            document.getElementById("task").textContent = randomTask;
-            currentTemperature += 20;
+            currentTemperature += 10;
             document.getElementById("temperature").style.height = currentTemperature + "%";
+            updateTask();
+            currentPlayer = currentPlayer === 1 ? 2 : 1; // 切换玩家
         }
+
+        // 添加自定义任务
+        function addCustomTask() {
+            const customTask = document.getElementById("customTaskInput").value;
+            if (customTask.trim() !== "") {
+                tasks.push(customTask);
+                document.getElementById("customTaskInput").value = ""; // 清空输入框
+                alert("自定义任务添加成功！");
+            } else {
+                alert("请输入有效的任务内容！");
+            }
+        }
+
+        // 初始化
+        updateTask();
     </script>
 </body>
 </html>
