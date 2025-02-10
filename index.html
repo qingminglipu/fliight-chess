@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>爱情温度计</title>
-    <style>
+<style>
         :root {
             --primary-color: #ff6b6b;
             --secondary-color: #4caf50;
@@ -137,7 +137,7 @@
             font-size: 1.2em;
             color: #555;
         }
-    </style>
+</style>
 </head>
 <body>
     <div class="game-container">
@@ -156,6 +156,9 @@
         <div class="custom-task">
             <input type="text" id="customTaskInput" placeholder="输入你们的专属任务...">
             <button class="add-button" id="addTaskBtn">添加任务</button>
+        </div>
+        <div id="soundHint" style="display: none; color: red; margin-top: 10px;">
+            请点击页面以启用音效！
         </div>
     </div>
 
@@ -177,6 +180,7 @@
                 this.currentTemperature = 0;
                 this.currentPlayer = 1;
                 this.isGameOver = false;
+                this.isSoundEnabled = false;
 
                 this.temperatureElement = document.getElementById("temperature");
                 this.taskElement = document.getElementById("task");
@@ -185,34 +189,31 @@
                 this.restartBtn = document.getElementById("restartBtn");
                 this.customTaskInput = document.getElementById("customTaskInput");
                 this.addTaskBtn = document.getElementById("addTaskBtn");
+                this.soundHint = document.getElementById("soundHint");
+
+                this.sound = new Audio("./sounds/button-3.mp3"); // 引用本地音效文件
+                this.sound.muted = true; // 初始化为静音
 
                 this.loadTasks();
                 this.initEventListeners();
                 this.updateTask();
-                this.isSoundEnabled = false; // 标记音效是否已启用
-                this.initEventListeners();
             }
 
             initEventListeners() {
                 // 在用户第一次点击时启用音效
                 document.addEventListener("click", () => {
                     if (!this.isSoundEnabled) {
+                        this.sound.muted = false;
                         this.isSoundEnabled = true;
+                        this.soundHint.style.display = "none";
                         this.playSound(); // 测试音效
-                        }
+                    }
                 });
+
                 this.actionBtn.addEventListener("click", () => this.nextTask());
                 this.restartBtn.addEventListener("click", () => this.restartGame());
                 this.addTaskBtn.addEventListener("click", () => this.addCustomTask());
                 this.customTaskInput.addEventListener("input", () => this.validateInput());
-            }
-
-            playSound() {
-                if (!this.isSoundEnabled) return; // 如果音效未启用，直接返回
-                const sound = new Audio("https://www.soundjay.com/button/sounds/button-3.mp3");
-                sound.play().catch(() => {
-                    console.log("音效播放失败，请与页面交互后重试。");
-                });
             }
 
             loadTasks() {
@@ -279,8 +280,14 @@
             }
 
             playSound() {
-                const sound = new Audio("https://www.soundjay.com/button/sounds/button-3.mp3");
-                sound.play();
+                if (!this.isSoundEnabled) {
+                    this.soundHint.style.display = "block";
+                    return;
+                }
+                this.sound.currentTime = 0; // 重置音效
+                this.sound.play().catch(() => {
+                    console.log("音效播放失败，请与页面交互后重试。");
+                });
             }
         }
 
