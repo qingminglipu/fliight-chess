@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>情侣飞行棋</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情侣飞行棋</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <h1>情侣飞行棋</h1>
-  <div id="game-board">
-    <!-- 飞行棋格子 -->
-    <div class="cell" data-description="给对方一个拥抱">1</div>
-    <div class="cell" data-description="一起唱首歌">2</div>
-    <div class="cell" data-description="为对方按摩肩膀">3</div>
-    <!-- 可以根据需要添加更多格子 -->
-  </div>
-  <div id="players">
-    <div id="player1" class="player">玩家1</div>
-    <div id="player2" class="player">玩家2</div>
-  </div>
-  <button id="roll-dice">投掷色子</button>
-  <div id="result"></div>
-  <script src="script.js"></script>
+    <div id="game">
+        <h1>情侣飞行棋</h1>
+        <div id="board">
+            <div class="row">
+                <div class="cell" data-pos="1"></div>
+                <div class="cell" data-pos="2"></div>
+                <div class="cell" data-pos="3"></div>
+                <div class="cell" data-pos="4"></div>
+                <div class="cell" data-pos="5"></div>
+                <div class="cell" data-pos="6"></div>
+                <div class="cell" data-pos="7"></div>
+            </div>
+            <div class="row">
+                <div class="cell" data-pos="8"></div>
+                <div class="cell" data-pos="9"></div>
+                <div class="cell" data-pos="10"></div>
+                <div class="cell" data-pos="11"></div>
+                <div class="cell" data-pos="12"></div>
+                <div class="cell" data-pos="13"></div>
+                <div class="cell" data-pos="14"></div>
+            </div>
+            <div class="row">
+                <div class="cell" data-pos="15"></div>
+                <div class="cell" data-pos="16"></div>
+                <div class="cell" data-pos="17"></div>
+                <div class="cell" data-pos="18"></div>
+                <div class="cell" data-pos="19"></div>
+                <div class="cell" data-pos="20"></div>
+                <div class="cell" data-pos="21"></div>
+            </div>
+        </div>
+        <button id="rollButton">掷骰子</button>
+        <div id="message"></div>
+        <div id="taskMessage"></div>
+    </div>
+    <script src="game.js"></script>
 </body>
-
 </html>
