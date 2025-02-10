@@ -1,27 +1,158 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>情侣飞行棋</title>
-    <link rel="stylesheet" href="feixingqi.css">
+    <style>
+        #board {
+            width: 600px;
+            height: 600px;
+            margin: 50px auto;
+            position: relative;
+            border-radius: 50%;
+            background: #fff0f5;
+        }
+
+        .cell {
+            width: 80px;
+            height: 40px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 50%;
+            border: 1px solid #ff69b4;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        #dice {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .plane {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.3s;
+        }
+
+        #player1 {
+            background: #ff1493;
+            top: -10px;
+            left: -10px;
+        }
+
+        #player2 {
+            background: #4169e1;
+            top: -10px;
+            right: -10px;
+        }
+
+        #message {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+            background: white;
+            border: 2px solid #ff69b4;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="game">
-        <h1>情侣飞行棋</h1>
-        <div id="board">
-            <div class="cell" data-pos="1"></div>
-            <div class="cell" data-pos="2"></div>
-            <div class="cell" data-pos="3"></div>
-            <div class="cell" data-pos="4"></div>
-            <div class="cell" data-pos="5"></div>
-            <div class="cell" data-pos="6"></div>
-            <div class="cell" data-pos="7"></div>
-        </div>
-        <button id="rollButton">掷骰子</button>
-        <div id="message"></div>
-        <div id="taskMessage"></div>
-    </div>
-    <script src="feixingqi.js"></script>
+    <button id="dice">掷骰子</button>
+    <div id="board"></div>
+    <div id="message"></div>
+
+    <script>
+        const cells = [
+            "给TA一个拥抱",
+            "分享一个秘密",
+            "对视10秒钟",
+            "模仿TA的经典动作",
+            "为TA唱首歌",
+            "自由格",
+            "背对背说出同一部电影",
+            "互换衣服1分钟",
+            "为对方画肖像",
+            "重现第一次约会场景",
+            "互相说3个优点",
+            "亲吻对方脸颊"
+        ];
+
+        const board = document.getElementById('board');
+        const radius = 250; // 棋盘半径
+        let currentPlayer = 1;
+        let positions = {1: 0, 2: 0};
+
+        // 创建棋盘格子
+        cells.forEach((text, index) => {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.textContent = text;
+            const angle = (index * 30) - 90; // 每个格子间隔30度
+            cell.style.transform = `rotate(${angle}deg) translate(${radius}px) rotate(${-angle}deg)`;
+            board.appendChild(cell);
+        });
+
+        // 创建玩家棋子
+        const plane1 = document.createElement('div');
+        plane1.className = 'plane';
+        plane1.id = 'player1';
+        board.appendChild(plane1);
+
+        const plane2 = document.createElement('div');
+        plane2.className = 'plane';
+        plane2.id = 'player2';
+        board.appendChild(plane2);
+
+        // 更新棋子位置
+        function updatePosition(player) {
+            const plane = document.getElementById(`player${player}`);
+            const angle = (positions[player] * 30) - 90;
+            const x = Math.cos(angle * Math.PI / 180) * radius;
+            const y = Math.sin(angle * Math.PI / 180) * radius;
+            
+            plane.style.transform = `translate(${x}px, ${y}px)`;
+            
+            // 显示当前格子内容
+            const message = document.getElementById('message');
+            message.textContent = cells[positions[player]];
+            message.style.display = 'block';
+            setTimeout(() => message.style.display = 'none', 2000);
+        }
+
+        // 掷骰子事件
+        document.getElementById('dice').addEventListener('click', () => {
+            const dice = Math.floor(Math.random() * 6) + 1;
+            positions[currentPlayer] = (positions[currentPlayer] + dice) % cells.length;
+            updatePosition(currentPlayer);
+            
+            // 切换玩家
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            alert(`玩家${currentPlayer === 1 ? 2 : 1} 掷出了 ${dice} 点！`);
+        });
+
+        // 初始化位置
+        updatePosition(1);
+        updatePosition(2);
+    </script>
 </body>
 </html>
