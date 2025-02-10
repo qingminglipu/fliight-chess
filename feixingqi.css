@@ -1,40 +1,78 @@
-#game-board {
-  display: flex;
-  flex-wrap: wrap;
-  width: 300px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f8ff;
+}
+
+#game {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-gap: 5px;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
 }
 
 .cell {
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 80px;
+    height: 80px;
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border: 2px solid #fff;
 }
 
-.player {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  position: absolute;
+#rollButton {
+    padding: 10px 20px;
+    background-color: #008cba;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-top: 10px;
 }
 
-#player1 {
-  background-color: red;
+#rollButton:hover {
+    background-color: #006f8f;
 }
 
-#player2 {
-  background-color: blue;
+#message {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
 }
 
-#roll-dice {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
+#taskMessage {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #e74c3c;
 }
 
-#result {
-  margin-top: 20px;
-  font-size: 18px;
+.plane {
+    width: 40px;
+    height: 40px;
+    background-color: #ff7f50;
+    border-radius: 50%;
+}
+
+.plane2 {
+    background-color: #7fffd4;
 }
