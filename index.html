@@ -1,166 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>情侣飞行棋</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱情温度计</title>
     <style>
-        #board {
-            width: 600px;
-            height: 600px;
-            margin: 50px auto;
-            position: relative;
-            border-radius: 50%;
-            background: #fff0f5;
-            border: 4px solid #ff69b4;
-        }
-
-        .cell {
-            width: 80px;
-            height: 40px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: 0 50%;
-            border: 1px solid #ff69b4;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 12px;
-            padding: 5px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9e3e3;
             text-align: center;
-            border-radius: 10px;
+            padding: 50px;
         }
-
-        #dice {
+        h1 {
+            color: #ff6b6b;
+        }
+        .thermometer {
+            width: 30px;
+            height: 200px;
+            background-color: #eee;
+            border: 2px solid #ccc;
+            border-radius: 15px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .temperature {
+            width: 100%;
+            background-color: #ff6b6b;
             position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0;
+            transition: height 0.5s;
+        }
+        .task {
+            margin: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        button {
             padding: 10px 20px;
-            background: #ff69b4;
+            font-size: 1em;
+            background-color: #ff6b6b;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
         }
-
-        .plane {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            position: absolute;
-            transition: all 0.3s ease;
-        }
-
-        #player1 {
-            background: #ff1493;
-        }
-
-        #player2 {
-            background: #4169e1;
-        }
-
-        #message {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px;
-            background: white;
-            border: 2px solid #ff69b4;
-            border-radius: 5px;
-            display: none;
+        button:hover {
+            background-color: #ff4c4c;
         }
     </style>
 </head>
 <body>
-    <button id="dice">掷骰子</button>
-    <div id="board"></div>
-    <div id="message"></div>
+    <h1>爱情温度计</h1>
+    <div class="thermometer">
+        <div class="temperature" id="temperature" style="height: 0%;"></div>
+    </div>
+    <div class="task" id="task">点击“开始游戏”提升爱情温度！</div>
+    <button onclick="nextTask()">开始游戏</button>
 
     <script>
-        const cells = [
-            "给TA一个拥抱",
-            "分享一个秘密",
-            "对视10秒钟",
-            "模仿TA的经典动作",
-            "为TA唱首歌",
-            "自由格",
-            "背对背说出同一部电影",
-            "互换衣服1分钟",
-            "为对方画肖像",
-            "重现第一次约会场景",
-            "互相说3个优点",
-            "亲吻对方脸颊",
-            "互换手机1分钟",
-            "一起跳舞",
-            "一起做瑜伽",
-            "告诉对方一个心愿"
+        const tasks = [
+            "给对方发一条甜蜜的消息。",
+            "回忆第一次约会的情景。",
+            "说一句让对方心跳加速的话。",
+            "模仿对方的习惯动作。",
+            "给对方一个温暖的拥抱。",
+            "分享一件你最近为对方做的小事。",
+            "说出对方最让你心动的瞬间。"
         ];
+        let currentTemperature = 0;
 
-        const board = document.getElementById('board');
-        const radius = 250; // 棋盘半径
-        const cellRadius = 120; // 格子半径 (相对棋盘中心)
-        let currentPlayer = 1;
-        let positions = {1: 0, 2: 0};
-
-        // 创建棋盘格子
-        cells.forEach((text, index) => {
-            const cell = document.createElement('div');
-            cell.className = 'cell';
-            cell.textContent = text;
-            const angle = (index * 360 / cells.length) - 90; // 格子均匀分布
-            cell.style.transform = `rotate(${angle}deg) translate(${cellRadius}px) rotate(${-angle}deg)`;
-            board.appendChild(cell);
-        });
-
-        // 创建玩家棋子
-        const plane1 = document.createElement('div');
-        plane1.className = 'plane';
-        plane1.id = 'player1';
-        board.appendChild(plane1);
-
-        const plane2 = document.createElement('div');
-        plane2.className = 'plane';
-        plane2.id = 'player2';
-        board.appendChild(plane2);
-
-        // 更新棋子位置
-        function updatePosition(player) {
-            const plane = document.getElementById(`player${player}`);
-            const angle = (positions[player] * 360 / cells.length) - 90; // 每个格子间隔相等
-            const rad = angle * Math.PI / 180;
-            
-            // 计算棋子位置的坐标
-            const x = Math.cos(rad) * cellRadius;
-            const y = Math.sin(rad) * cellRadius;
-
-            plane.style.left = `calc(50% + ${x}px)`;
-            plane.style.top = `calc(50% + ${y}px)`;
-
-            // 显示当前格子内容
-            const message = document.getElementById('message');
-            message.textContent = cells[positions[player]];
-            message.style.display = 'block';
-            setTimeout(() => message.style.display = 'none', 2000);
+        function nextTask() {
+            if (currentTemperature >= 100) {
+                alert("恭喜！你们的爱情温度已达到100%！继续保持甜蜜哦~");
+                return;
+            }
+            const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+            document.getElementById("task").textContent = randomTask;
+            currentTemperature += 20;
+            document.getElementById("temperature").style.height = currentTemperature + "%";
         }
-
-        // 掷骰子事件
-        document.getElementById('dice').addEventListener('click', () => {
-            const dice = Math.floor(Math.random() * 6) + 1;
-            positions[currentPlayer] = (positions[currentPlayer] + dice) % cells.length;
-            updatePosition(currentPlayer);
-            
-            // 切换玩家
-            currentPlayer = currentPlayer === 1 ? 2 : 1;
-            alert(`玩家${currentPlayer === 1 ? 2 : 1} 掷出了 ${dice} 点！`);
-        });
-
-        // 初始化位置
-        updatePosition(1);
-        updatePosition(2);
     </script>
 </body>
 </html>
