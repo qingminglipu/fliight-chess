@@ -98,6 +98,7 @@
 
         const board = document.getElementById('board');
         const radius = 250; // 棋盘半径
+        const cellRadius = 100; // 格子半径 (相对棋盘中心)
         let currentPlayer = 1;
         let positions = {1: 0, 2: 0};
 
@@ -107,7 +108,7 @@
             cell.className = 'cell';
             cell.textContent = text;
             const angle = (index * 30) - 90; // 每个格子间隔30度
-            cell.style.transform = `rotate(${angle}deg) translate(${radius}px) rotate(${-angle}deg)`;
+            cell.style.transform = `rotate(${angle}deg) translate(${cellRadius}px) rotate(${-angle}deg)`;
             board.appendChild(cell);
         });
 
@@ -129,8 +130,8 @@
             const rad = angle * Math.PI / 180;
             
             // 计算棋子位置的坐标
-            const x = Math.cos(rad) * radius;
-            const y = Math.sin(rad) * radius;
+            const x = Math.cos(rad) * cellRadius;
+            const y = Math.sin(rad) * cellRadius;
 
             plane.style.left = `calc(50% + ${x}px)`;
             plane.style.top = `calc(50% + ${y}px)`;
